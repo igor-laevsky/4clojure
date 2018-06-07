@@ -15,8 +15,7 @@
 ;    (= (count fs) (count (set fs)))))
 
 (defn __ [s]
-  (apply distinct? (apply concat (seq s)))
-  )
+  (apply distinct? (apply concat (seq s))))
 
 
 

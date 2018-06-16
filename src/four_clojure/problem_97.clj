@@ -1,4 +1,4 @@
-(ns problem-97
+(ns four-clojure.problem-97
   (:require [clojure.test :refer :all]
             [clojure.tools.trace :refer :all]))
 

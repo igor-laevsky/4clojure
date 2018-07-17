@@ -1,5 +1,6 @@
 (ns four-clojure.problem-150
-  (:require [clojure.test :refer :all]))
+  (:require [clojure.test :refer :all]
+            [spyscope.core :refer :all]))
 
 ;(defn palindr [n]
 ;  (letfn [(is-p [nn]
@@ -24,6 +25,24 @@
 ;        (palindr (inc n))
 ;        ))))
 
+(defn palindr [n]
+  (letfn [(from-arr [nn] (BigInteger. (apply str nn)))
+          (to-arr [nn] (if (zero? nn) [0] (map #(- (int %) (int \0)) (str nn))))
+          (step [nn even?]
+            (lazy-seq
+              (let [nd (to-arr nn)
+                    bot (reverse (if even? nd (butlast nd)))
+                    cur (from-arr (concat nd bot))]
+                (cons cur (if (every? #(= 9 %) nd)
+                            (step (if even? (inc nn) (quot (inc nn) 10))
+                                  (not even?))
+                            (step (inc nn) even?))))))]
+    (let [nd (to-arr n)
+          len (count nd)]
+      (drop-while
+        #(< % n)
+        (step (from-arr (take (+ (quot len 2) (mod len 2)) nd))
+              (even? len))))))
 
 (def __ palindr)
 
@@ -52,6 +71,6 @@
   (is (= true
          (apply < (take 6666 (__ 9999999)))))
 
-  (= (nth (__ 0) 10101)
-     9102019)
+  (is (= (nth (__ 0) 10101)
+     9102019))
   )
